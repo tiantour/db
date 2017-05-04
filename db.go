@@ -2,7 +2,8 @@ package db
 
 import (
 	"fmt"
-	"runtime"
+	"log"
+	"os"
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
@@ -10,42 +11,25 @@ import (
 )
 
 var (
-	conn    chan int
-	cap     = runtime.NumCPU()
-	pool    = NewPool()
-	db, err = sqlx.Open(
-		"mysql",
-		fmt.Sprintf(
-			"%s:%s@/%s",
-			conf.Options.DB.Uname,
-			conf.Options.DB.Passwd,
-			conf.Options.DB.Database,
-		),
+	db  *sqlx.DB
+	err error
+)
+
+func init() {
+	newServe()
+	newPool()
+}
+
+func newServe() {
+	account := fmt.Sprintf(
+		"%s:%s@/%s",
+		conf.Data.DB.Uname,
+		conf.Data.DB.Passwd,
+		conf.Data.DB.Database,
 	)
-)
-
-// Pool pool
-type Pool struct {
-	sqlx.DB
-}
-
-// NewPool newpool
-func NewPool() *Pool {
-	conn = make(chan int, cap)
-	for i := 0; i < cap; i++ {
-		conn <- 1
+	db, err = sqlx.Open("mysql", account)
+	if err != nil {
+		log.Println(err)
+		os.Exit(1)
 	}
-	return &Pool{*db}
 }
-
-var (
-	// Read Read
-	Read = &read{}
-	// Write Write
-	Write = &write{}
-)
-
-type (
-	write struct{}
-	read  struct{}
-)

@@ -2,13 +2,18 @@ package db
 
 import "database/sql"
 
+type write struct{}
+
+// Write Write
+var Write = &write{}
+
 // Item
 func (w *write) Item(query string, args ...interface{}) (sql.Result, error) {
 	<-conn
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.Prepare(query)
+	stmt, err := po.DB.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +27,7 @@ func (w *write) List(query string, args []interface{}) error {
 	defer func() {
 		conn <- 1
 	}()
-	tx, err := pool.DB.Begin()
+	tx, err := po.DB.Begin()
 	if err != nil {
 		return err
 	}
@@ -49,7 +54,7 @@ func (w *write) ItemNamed(query string, args interface{}) (sql.Result, error) {
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.PrepareNamed(query)
+	stmt, err := po.DB.PrepareNamed(query)
 	if err != nil {
 		return nil, err
 	}
@@ -63,7 +68,7 @@ func (w *write) ListNamed(query string, args []interface{}) error {
 	defer func() {
 		conn <- 1
 	}()
-	tx, err := pool.DB.Beginx()
+	tx, err := po.DB.Beginx()
 	if err != nil {
 		return err
 	}

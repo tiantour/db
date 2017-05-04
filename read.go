@@ -2,13 +2,18 @@ package db
 
 import "github.com/jmoiron/sqlx"
 
+type read struct{}
+
+// Read Read
+var Read = &read{}
+
 // List Query
 func (r *read) List(query string, args ...interface{}) (*sqlx.Rows, error) {
 	<-conn
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.Preparex(query)
+	stmt, err := po.DB.Preparex(query)
 	if err != nil {
 		return nil, err
 	}
@@ -22,7 +27,7 @@ func (r *read) Item(query string, args ...interface{}) (*sqlx.Row, error) {
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.Preparex(query)
+	stmt, err := po.DB.Preparex(query)
 	if err != nil {
 		return nil, err
 	}
@@ -36,7 +41,7 @@ func (r *read) ListStruct(dest interface{}, query string, args ...interface{}) e
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.Preparex(query)
+	stmt, err := po.DB.Preparex(query)
 	if err != nil {
 		return err
 	}
@@ -50,7 +55,7 @@ func (r *read) ItemStruct(dest interface{}, query string, args ...interface{}) e
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.Preparex(query)
+	stmt, err := po.DB.Preparex(query)
 	if err != nil {
 		return err
 	}
@@ -64,7 +69,7 @@ func (r *read) ListNamed(query string, args map[string]interface{}) (*sqlx.Rows,
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.PrepareNamed(query)
+	stmt, err := po.DB.PrepareNamed(query)
 	if err != nil {
 		return nil, err
 	}
@@ -78,7 +83,7 @@ func (r *read) ItemNamed(query string, args map[string]interface{}) (*sqlx.Row, 
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.PrepareNamed(query)
+	stmt, err := po.DB.PrepareNamed(query)
 	if err != nil {
 		return nil, err
 	}
@@ -92,7 +97,7 @@ func (r *read) ListStructNamed(dest interface{}, query string, args map[string]i
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.PrepareNamed(query)
+	stmt, err := po.DB.PrepareNamed(query)
 	if err != nil {
 		return err
 	}
@@ -106,7 +111,7 @@ func (r *read) ItemStructNamed(dest interface{}, query string, args map[string]i
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := pool.DB.PrepareNamed(query)
+	stmt, err := po.DB.PrepareNamed(query)
 	if err != nil {
 		return err
 	}

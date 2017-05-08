@@ -29,7 +29,6 @@ func newServe() {
 		conf.Data.DB.Port,
 		conf.Data.DB.Database,
 	)
-	fmt.Println(account)
 	db, err = sqlx.Open("mysql", account)
 	if err != nil {
 		log.Println(err)

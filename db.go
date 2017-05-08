@@ -22,11 +22,14 @@ func init() {
 
 func newServe() {
 	account := fmt.Sprintf(
-		"%s:%s@/%s",
+		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
 		conf.Data.DB.Uname,
 		conf.Data.DB.Passwd,
+		conf.Data.DB.Host,
+		conf.Data.DB.Port,
 		conf.Data.DB.Database,
 	)
+	fmt.Println(account)
 	db, err = sqlx.Open("mysql", account)
 	if err != nil {
 		log.Println(err)

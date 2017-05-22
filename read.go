@@ -2,13 +2,16 @@ package db
 
 import "github.com/jmoiron/sqlx"
 
-type read struct{}
-
 // Read Read
-var Read = &read{}
+type Read struct{}
 
-// List Query
-func (r *read) List(query string, args ...interface{}) (*sqlx.Rows, error) {
+// NewRead new read
+func NewRead() *Read {
+	return &Read{}
+}
+
+// List read list
+func (r Read) List(query string, args ...interface{}) (*sqlx.Rows, error) {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -21,8 +24,8 @@ func (r *read) List(query string, args ...interface{}) (*sqlx.Rows, error) {
 	return stmt.Queryx(args...)
 }
 
-// Item QueryRow
-func (r *read) Item(query string, args ...interface{}) (*sqlx.Row, error) {
+// Item read item
+func (r Read) Item(query string, args ...interface{}) (*sqlx.Row, error) {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -35,8 +38,8 @@ func (r *read) Item(query string, args ...interface{}) (*sqlx.Row, error) {
 	return stmt.QueryRowx(args...), nil
 }
 
-// Listx Select
-func (r *read) ListStruct(dest interface{}, query string, args ...interface{}) error {
+// ListStruct read list struct
+func (r Read) ListStruct(dest interface{}, query string, args ...interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -49,8 +52,8 @@ func (r *read) ListStruct(dest interface{}, query string, args ...interface{}) e
 	return stmt.Select(dest, args...)
 }
 
-// Itemx Get
-func (r *read) ItemStruct(dest interface{}, query string, args ...interface{}) error {
+// ItemStruct read item struct
+func (r Read) ItemStruct(dest interface{}, query string, args ...interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -63,8 +66,8 @@ func (r *read) ItemStruct(dest interface{}, query string, args ...interface{}) e
 	return stmt.Get(dest, args...)
 }
 
-// Itemx Get
-func (r *read) ListNamed(query string, args map[string]interface{}) (*sqlx.Rows, error) {
+// ListNamed read list named
+func (r Read) ListNamed(query string, args map[string]interface{}) (*sqlx.Rows, error) {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -77,8 +80,8 @@ func (r *read) ListNamed(query string, args map[string]interface{}) (*sqlx.Rows,
 	return stmt.Queryx(args)
 }
 
-// Itemx Get
-func (r *read) ItemNamed(query string, args map[string]interface{}) (*sqlx.Row, error) {
+// ItemNamed read item named
+func (r Read) ItemNamed(query string, args map[string]interface{}) (*sqlx.Row, error) {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -91,8 +94,8 @@ func (r *read) ItemNamed(query string, args map[string]interface{}) (*sqlx.Row, 
 	return stmt.QueryRowx(args), nil
 }
 
-// Listx Select
-func (r *read) ListStructNamed(dest interface{}, query string, args map[string]interface{}) error {
+// ListStructNamed list struct named
+func (r Read) ListStructNamed(dest interface{}, query string, args map[string]interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -105,8 +108,8 @@ func (r *read) ListStructNamed(dest interface{}, query string, args map[string]i
 	return stmt.Select(dest, args)
 }
 
-// Itemx Get
-func (r *read) ItemStructNamed(dest interface{}, query string, args map[string]interface{}) error {
+// ItemStructNamed item struct named
+func (r Read) ItemStructNamed(dest interface{}, query string, args map[string]interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1

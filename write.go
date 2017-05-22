@@ -2,13 +2,16 @@ package db
 
 import "database/sql"
 
-type write struct{}
+// Write write
+type Write struct{}
 
-// Write Write
-var Write = &write{}
+// NewWrite new write
+func NewWrite() *Write {
+	return &Write{}
+}
 
-// Item
-func (w *write) Item(query string, args ...interface{}) (sql.Result, error) {
+// Item write
+func (w Write) Item(query string, args ...interface{}) (sql.Result, error) {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -21,8 +24,8 @@ func (w *write) Item(query string, args ...interface{}) (sql.Result, error) {
 	return stmt.Exec(args...)
 }
 
-// List
-func (w *write) List(query string, args []interface{}) error {
+// List write list
+func (w Write) List(query string, args []interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -48,8 +51,8 @@ func (w *write) List(query string, args []interface{}) error {
 	return tx.Commit()
 }
 
-// Item
-func (w *write) ItemNamed(query string, args interface{}) (sql.Result, error) {
+// ItemNamed wirte item named
+func (w Write) ItemNamed(query string, args interface{}) (sql.Result, error) {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -62,8 +65,8 @@ func (w *write) ItemNamed(query string, args interface{}) (sql.Result, error) {
 	return stmt.Exec(args)
 }
 
-// List
-func (w *write) ListNamed(query string, args []interface{}) error {
+// ListNamed write list named
+func (w Write) ListNamed(query string, args []interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1

@@ -2,7 +2,6 @@ package db
 
 import (
 	"fmt"
-	"log"
 	"os"
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
@@ -23,15 +22,14 @@ func init() {
 func newServe() {
 	account := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
-		conf.Data.DB.Uname,
-		conf.Data.DB.Passwd,
-		conf.Data.DB.Host,
-		conf.Data.DB.Port,
-		conf.Data.DB.Database,
+		conf.NewConf().DB.Uname,
+		conf.NewConf().DB.Passwd,
+		conf.NewConf().DB.Host,
+		conf.NewConf().DB.Port,
+		conf.NewConf().DB.Database,
 	)
 	db, err = sqlx.Open("mysql", account)
 	if err != nil {
-		log.Println(err)
 		os.Exit(1)
 	}
 }

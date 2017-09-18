@@ -3,9 +3,11 @@ package db
 import (
 	"fmt"
 	"os"
+	"strings"
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
+	"github.com/jmoiron/sqlx/reflectx"
 	"github.com/tiantour/conf"
 )
 
@@ -32,4 +34,5 @@ func newServe() {
 	if err != nil {
 		os.Exit(1)
 	}
+	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

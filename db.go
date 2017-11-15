@@ -31,6 +31,9 @@ func init() {
 }
 
 func newServe() {
+	if Uname == "" || Passwd == "" || DB == "" {
+		log.Fatal("db conf is null")
+	}
 	account := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
 		Uname,

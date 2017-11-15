@@ -2,16 +2,25 @@ package db
 
 import (
 	"fmt"
-	"os"
+	"log"
 	"strings"
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/jmoiron/sqlx/reflectx"
-	"github.com/tiantour/conf"
 )
 
 var (
+	// IP ip
+	IP = "127.0.0.1"
+	// Port port
+	Port = "3306"
+	// Uname uname
+	Uname = ""
+	// Passwd passwd
+	Passwd = ""
+	// DB db
+	DB  = ""
 	db  *sqlx.DB
 	err error
 )
@@ -24,15 +33,15 @@ func init() {
 func newServe() {
 	account := fmt.Sprintf(
 		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
-		conf.NewConf().DB.Uname,
-		conf.NewConf().DB.Passwd,
-		conf.NewConf().DB.Host,
-		conf.NewConf().DB.Port,
-		conf.NewConf().DB.Database,
+		Uname,
+		Passwd,
+		IP,
+		Port,
+		DB,
 	)
 	db, err = sqlx.Open("mysql", account)
 	if err != nil {
-		os.Exit(1)
+		log.Fatal(err)
 	}
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

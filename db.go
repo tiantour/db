@@ -14,7 +14,7 @@ var (
 	// IP ip
 	IP = "127.0.0.1"
 	// Port port
-	Port = "3306"
+	Port = ":3306"
 	// Uname uname
 	Uname = ""
 	// Passwd passwd
@@ -35,7 +35,7 @@ func newServe() {
 		log.Fatal("db conf is null")
 	}
 	account := fmt.Sprintf(
-		"%s:%s@tcp(%s:%s)/%s?charset=utf8",
+		"%s:%s@tcp(%s%s)/%s?charset=utf8",
 		Uname,
 		Passwd,
 		IP,

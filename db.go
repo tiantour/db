@@ -3,6 +3,7 @@ package db
 import (
 	"fmt"
 	"log"
+	"runtime"
 	"strings"
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
@@ -11,40 +12,42 @@ import (
 )
 
 var (
-	// IP ip
-	IP = "127.0.0.1"
-	// Port port
-	Port = ":3306"
-	// Uname uname
-	Uname = ""
-	// Passwd passwd
-	Passwd = ""
-	// DB db
-	DB  = ""
-	db  *sqlx.DB
-	err error
+	conn chan int
+	po   *pool
 )
 
-func init() {
-	newServe()
-	newPool()
+// pool pool
+type pool struct {
+	sqlx.DB
 }
 
-func newServe() {
-	if Uname == "" || Passwd == "" || DB == "" {
+// New new db
+func New(ip, port, database, uname, passwd string) {
+	if uname == "" || database == "" || passwd == "" {
 		log.Fatal("db conf is null")
 	}
-	account := fmt.Sprintf(
-		"%s:%s@tcp(%s%s)/%s?charset=utf8",
-		Uname,
-		Passwd,
-		IP,
-		Port,
-		DB,
-	)
-	db, err = sqlx.Open("mysql", account)
+	if ip == "" {
+		ip = "127.0.0.1"
+	}
+	if port == "" {
+		port = ":6379"
+	}
+	db, err := sqlx.Open("mysql",
+		fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
+			uname,
+			passwd,
+			ip,
+			port,
+			database,
+		))
 	if err != nil {
 		log.Fatal(err)
 	}
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
+	cap := runtime.NumCPU()
+	conn = make(chan int, cap)
+	for i := 0; i < cap; i++ {
+		conn <- 1
+	}
+	po = &pool{*db}
 }

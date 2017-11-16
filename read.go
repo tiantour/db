@@ -1,6 +1,8 @@
 package db
 
-import "github.com/jmoiron/sqlx"
+import (
+	"github.com/jmoiron/sqlx"
+)
 
 // Read Read
 type Read struct{}

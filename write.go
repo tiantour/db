@@ -5,27 +5,13 @@ import "database/sql"
 // Write write
 type Write struct{}
 
-// NewWrite new write
+// NewWrite new *Write
 func NewWrite() *Write {
 	return &Write{}
 }
 
-// Item write
-func (w Write) Item(query string, args ...interface{}) (sql.Result, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.Prepare(query)
-	if err != nil {
-		return nil, err
-	}
-	defer stmt.Close()
-	return stmt.Exec(args...)
-}
-
 // List write list
-func (w Write) List(query string, args []interface{}) error {
+func (w *Write) List(query string, args []interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -40,8 +26,7 @@ func (w Write) List(query string, args []interface{}) error {
 		return err
 	}
 	defer stmt.Close()
-	argsLength := len(args)
-	for i := 0; i < argsLength; i++ {
+	for i := 0; i < len(args); i++ {
 		_, err = stmt.Exec(args[i])
 		if err != nil {
 			tx.Rollback()
@@ -51,22 +36,22 @@ func (w Write) List(query string, args []interface{}) error {
 	return tx.Commit()
 }
 
-// ItemNamed wirte item named
-func (w Write) ItemNamed(query string, args interface{}) (sql.Result, error) {
+// Item write
+func (w *Write) Item(query string, args ...interface{}) (sql.Result, error) {
 	<-conn
 	defer func() {
 		conn <- 1
 	}()
-	stmt, err := po.DB.PrepareNamed(query)
+	stmt, err := po.DB.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
 	defer stmt.Close()
-	return stmt.Exec(args)
+	return stmt.Exec(args...)
 }
 
 // ListNamed write list named
-func (w Write) ListNamed(query string, args []interface{}) error {
+func (w *Write) ListNamed(query string, args []interface{}) error {
 	<-conn
 	defer func() {
 		conn <- 1
@@ -81,8 +66,7 @@ func (w Write) ListNamed(query string, args []interface{}) error {
 		return err
 	}
 	defer stmt.Close()
-	argsLength := len(args)
-	for i := 0; i < argsLength; i++ {
+	for i := 0; i < len(args); i++ {
 		_, err = stmt.Exec(args[i])
 		if err != nil {
 			tx.Rollback()
@@ -90,4 +74,18 @@ func (w Write) ListNamed(query string, args []interface{}) error {
 		}
 	}
 	return tx.Commit()
+}
+
+// ItemNamed wirte item named
+func (w *Write) ItemNamed(query string, args interface{}) (sql.Result, error) {
+	<-conn
+	defer func() {
+		conn <- 1
+	}()
+	stmt, err := po.DB.PrepareNamed(query)
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+	return stmt.Exec(args)
 }

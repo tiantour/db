@@ -24,7 +24,7 @@ type pool struct {
 }
 
 func init() {
-	c := conf.NewConf().DB
+	c := conf.NewDB().Data
 	if c.Uname == "" || c.Database == "" || c.Passwd == "" {
 		log.Fatal("db conf is null")
 	}

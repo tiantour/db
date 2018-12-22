@@ -5,6 +5,7 @@ import (
 	"log"
 	"runtime"
 	"strings"
+	"time"
 
 	// mysql
 	_ "github.com/go-sql-driver/mysql"
@@ -46,6 +47,16 @@ func init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	db.SetConnMaxLifetime(time.Second * 14400)
+	db.SetMaxIdleConns(1024)
+	db.SetMaxOpenConns(1024)
+
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 
 	cap := runtime.NumCPU()

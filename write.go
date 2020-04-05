@@ -12,11 +12,7 @@ func NewWrite() *Write {
 
 // List write list
 func (w *Write) List(query string, args []interface{}) error {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	tx, err := po.DB.Begin()
+	tx, err := db.Begin()
 	if err != nil {
 		return err
 	}
@@ -38,11 +34,7 @@ func (w *Write) List(query string, args []interface{}) error {
 
 // Item write
 func (w *Write) Item(query string, args ...interface{}) (sql.Result, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.Prepare(query)
+	stmt, err := db.Prepare(query)
 	if err != nil {
 		return nil, err
 	}
@@ -52,11 +44,7 @@ func (w *Write) Item(query string, args ...interface{}) (sql.Result, error) {
 
 // ListNamed write list named
 func (w *Write) ListNamed(query string, args []interface{}) error {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	tx, err := po.DB.Beginx()
+	tx, err := db.Beginx()
 	if err != nil {
 		return err
 	}
@@ -78,11 +66,7 @@ func (w *Write) ListNamed(query string, args []interface{}) error {
 
 // ItemNamed wirte item named
 func (w *Write) ItemNamed(query string, args interface{}) (sql.Result, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.PrepareNamed(query)
+	stmt, err := db.PrepareNamed(query)
 	if err != nil {
 		return nil, err
 	}

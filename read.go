@@ -14,11 +14,7 @@ func NewRead() *Read {
 
 // List read list
 func (r *Read) List(query string, args ...interface{}) (*sqlx.Rows, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.Preparex(query)
+	stmt, err := db.Preparex(query)
 	if err != nil {
 		return nil, err
 	}
@@ -28,11 +24,7 @@ func (r *Read) List(query string, args ...interface{}) (*sqlx.Rows, error) {
 
 // Item read item
 func (r *Read) Item(query string, args ...interface{}) (*sqlx.Row, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.Preparex(query)
+	stmt, err := db.Preparex(query)
 	if err != nil {
 		return nil, err
 	}
@@ -42,11 +34,7 @@ func (r *Read) Item(query string, args ...interface{}) (*sqlx.Row, error) {
 
 // ListStruct read list struct
 func (r *Read) ListStruct(dest interface{}, query string, args ...interface{}) error {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.Preparex(query)
+	stmt, err := db.Preparex(query)
 	if err != nil {
 		return err
 	}
@@ -56,11 +44,7 @@ func (r *Read) ListStruct(dest interface{}, query string, args ...interface{}) e
 
 // ItemStruct read item struct
 func (r *Read) ItemStruct(dest interface{}, query string, args ...interface{}) error {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.Preparex(query)
+	stmt, err := db.Preparex(query)
 	if err != nil {
 		return err
 	}
@@ -70,11 +54,7 @@ func (r *Read) ItemStruct(dest interface{}, query string, args ...interface{}) e
 
 // ListNamed read list named
 func (r *Read) ListNamed(query string, args interface{}) (*sqlx.Rows, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.PrepareNamed(query)
+	stmt, err := db.PrepareNamed(query)
 	if err != nil {
 		return nil, err
 	}
@@ -84,11 +64,7 @@ func (r *Read) ListNamed(query string, args interface{}) (*sqlx.Rows, error) {
 
 // ItemNamed read item named
 func (r *Read) ItemNamed(query string, args interface{}) (*sqlx.Row, error) {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.PrepareNamed(query)
+	stmt, err := db.PrepareNamed(query)
 	if err != nil {
 		return nil, err
 	}
@@ -98,11 +74,7 @@ func (r *Read) ItemNamed(query string, args interface{}) (*sqlx.Row, error) {
 
 // ListStructNamed list struct named
 func (r *Read) ListStructNamed(dest interface{}, query string, args interface{}) error {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.PrepareNamed(query)
+	stmt, err := db.PrepareNamed(query)
 	if err != nil {
 		return err
 	}
@@ -112,11 +84,7 @@ func (r *Read) ListStructNamed(dest interface{}, query string, args interface{})
 
 // ItemStructNamed item struct named
 func (r *Read) ItemStructNamed(dest interface{}, query string, args interface{}) error {
-	<-conn
-	defer func() {
-		conn <- 1
-	}()
-	stmt, err := po.DB.PrepareNamed(query)
+	stmt, err := db.PrepareNamed(query)
 	if err != nil {
 		return err
 	}

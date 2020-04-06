@@ -32,8 +32,8 @@ func init() {
 		log.Fatalf("open db err: %v", err)
 	}
 
-	db.SetMaxIdleConns(10)
-	db.SetMaxOpenConns(20)
-	db.SetConnMaxLifetime(30 * time.Minute)
+	db.SetMaxIdleConns(5)
+	db.SetMaxOpenConns(10)
+	db.SetConnMaxLifetime(15 * time.Minute)
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

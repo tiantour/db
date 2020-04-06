@@ -18,7 +18,7 @@ var db *sqlx.DB
 
 func init() {
 	c := conf.NewDB().Data
-	source := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
+	address := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
 		c.Uname,
 		c.Passwd,
 		c.IP,
@@ -27,18 +27,13 @@ func init() {
 	)
 
 	var err error
-	db, err = sqlx.Open("mysql", source)
+	db, err = sqlx.Connect("mysql", address)
 	if err != nil {
 		log.Fatalf("open db err: %v", err)
 	}
 
-	err = db.Ping()
-	if err != nil {
-		log.Fatalf("ping db err: %v", err)
-	}
-
-	db.SetMaxOpenConns(25)
-	db.SetMaxIdleConns(25)
-	db.SetConnMaxLifetime(5 * time.Minute)
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(20)
+	db.SetConnMaxLifetime(30 * time.Minute)
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

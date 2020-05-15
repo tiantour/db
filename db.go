@@ -18,7 +18,6 @@ var db *sqlx.DB
 
 func init() {
 	c := conf.NewDB().Data
-	fmt.Println(1, c)
 	address := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
 		c.Uname,
 		c.Passwd,
@@ -26,13 +25,12 @@ func init() {
 		c.Port,
 		c.Database,
 	)
-	fmt.Println(2, address)
 
 	var err error
 	db, err = sqlx.Connect("mysql", address)
-	fmt.Println(3, db, err)
 	if err != nil {
 		log.Fatalf("open db err: %v", err)
+		defer db.Close()
 	}
 
 	db.SetMaxIdleConns(5)

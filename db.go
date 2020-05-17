@@ -33,8 +33,14 @@ func init() {
 		defer db.Close()
 	}
 
-	db.SetMaxIdleConns(5)
-	db.SetMaxOpenConns(10)
-	db.SetConnMaxLifetime(15 * time.Minute)
+	err = db.Ping()
+	if err != nil {
+		log.Fatalf("ping db err: %v", err)
+	}
+
+	db.SetMaxIdleConns(10)
+	db.SetMaxOpenConns(20)
+	db.SetConnMaxLifetime(30 * time.Minute)
+
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

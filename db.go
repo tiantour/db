@@ -29,18 +29,19 @@ func init() {
 	var err error
 	db, err = sqlx.Connect("mysql", address)
 	if err != nil {
-		log.Fatalf("open db err: %v", err)
 		defer db.Close()
+		log.Fatalf("open db err: %v", err)
 	}
 
 	err = db.Ping()
 	if err != nil {
+		defer db.Close()
 		log.Fatalf("ping db err: %v", err)
 	}
 
-	db.SetMaxIdleConns(10)
-	db.SetMaxOpenConns(20)
-	db.SetConnMaxLifetime(30 * time.Minute)
+	db.SetMaxIdleConns(120)
+	db.SetMaxOpenConns(120)
+	db.SetConnMaxLifetime(240 * time.Minute)
 
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

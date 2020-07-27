@@ -30,12 +30,13 @@ func init() {
 	db, err = sqlx.Connect("mysql", address)
 	if err != nil {
 		log.Fatalf("open db err: %v", err)
+		defer db.Close()
 	}
-	defer db.Close()
 
 	err = db.Ping()
 	if err != nil {
 		log.Fatalf("ping db err: %v", err)
+		defer db.Close()
 	}
 
 	db.SetMaxIdleConns(120)

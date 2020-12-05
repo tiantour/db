@@ -9,5 +9,5 @@ github.com/lib/pq v1.0.0 h1:X5PMW56eZitiTeO7tKzZxFCSpbFZJtkMMooicw2us9A=
 github.com/lib/pq v1.0.0/go.mod h1:5WUZQaWbwv1U+lTReE5YruASi9Al49XbQIvNi/34Woo=
 github.com/mattn/go-sqlite3 v1.9.0 h1:pDRiWfl+++eC2FEFRy6jXmQlvp4Yh3z1MJKg4UeYM/4=
 github.com/mattn/go-sqlite3 v1.9.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
-github.com/tiantour/conf v1.5.8 h1:Ue2Lma6AFH5gML9+7qx1CjzH79eyEq8Z2c4e5Kmu4m8=
-github.com/tiantour/conf v1.5.8/go.mod h1:Qe1Fs5sY3xsrKSh9NhnHCh7qR4T9/XIM6/E7LRbC7CE=
+github.com/tiantour/conf v1.5.9 h1:uBzRfTF6tn/0yGuKIlWMCT0L+xegeHhc9B+lhcSX+hM=
+github.com/tiantour/conf v1.5.9/go.mod h1:2UPTqNLZ4m9fxLLYv7XcnufpB3+vDHlmGKwxUvOW1Fo=

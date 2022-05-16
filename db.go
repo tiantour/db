@@ -6,42 +6,34 @@ import (
 	"strings"
 	"time"
 
-	// mysql
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/jmoiron/sqlx/reflectx"
 	"github.com/tiantour/conf"
 )
 
-// db pool
-var db *sqlx.DB
+var (
+	err     error
+	db      *sqlx.DB
+	address = fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
+		conf.NewDB().Data.Uname,
+		conf.NewDB().Data.Passwd,
+		conf.NewDB().Data.IP,
+		conf.NewDB().Data.Port,
+		conf.NewDB().Data.Database,
+	)
+)
 
 func init() {
-	c := conf.NewDB().Data
-	address := fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
-		c.Uname,
-		c.Passwd,
-		c.IP,
-		c.Port,
-		c.Database,
-	)
-
-	var err error
 	db, err = sqlx.Connect("mysql", address)
 	if err != nil {
-		log.Fatalf("open db err: %v", err)
 		defer db.Close()
+		log.Fatalf("connect db err: %v", err)
 	}
 
-	err = db.Ping()
-	if err != nil {
-		log.Fatalf("ping db err: %v", err)
-		defer db.Close()
-	}
-
-	db.SetMaxIdleConns(120)
-	db.SetMaxOpenConns(120)
-	db.SetConnMaxLifetime(240 * time.Minute)
+	db.SetMaxIdleConns(64)
+	db.SetMaxOpenConns(32)
+	db.SetConnMaxLifetime(128 * time.Minute)
 
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }

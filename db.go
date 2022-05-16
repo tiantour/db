@@ -37,3 +37,7 @@ func init() {
 
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
 }
+
+func New() *sqlx.DB {
+	return db
+}

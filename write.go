@@ -37,8 +37,27 @@ func (w *Write) List(query string, args ...[]interface{}) (sql.Result, error) {
 }
 
 // ListNamed write list named
-func (w *Write) ListNamed(query string, args interface{}) (sql.Result, error) {
-	return db.NamedExec(query, args)
+func (w *Write) ListNamed(query string, args ...interface{}) (sql.Result, error) {
+	tx, err := db.Beginx()
+	if err != nil {
+		return nil, err
+	}
+	defer tx.Rollback()
+
+	stmt, err := db.PrepareNamed(db.Rebind(query))
+	if err != nil {
+		return nil, err
+	}
+	defer stmt.Close()
+
+	var result sql.Result
+	for _, v := range args {
+		result, err = stmt.Exec(v)
+		if err != nil {
+			return nil, err
+		}
+	}
+	return result, tx.Commit()
 }
 
 // Item write

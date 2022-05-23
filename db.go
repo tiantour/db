@@ -1,7 +1,6 @@
 package db
 
 import (
-	"fmt"
 	"log"
 	"strings"
 	"time"
@@ -9,25 +8,15 @@ import (
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/jmoiron/sqlx"
 	"github.com/jmoiron/sqlx/reflectx"
-	"github.com/tiantour/conf"
+	_ "github.com/lib/pq"
 )
 
-var (
-	err     error
-	db      *sqlx.DB
-	address = fmt.Sprintf("%s:%s@tcp(%s%s)/%s?charset=utf8",
-		conf.NewDB().Data.Uname,
-		conf.NewDB().Data.Passwd,
-		conf.NewDB().Data.IP,
-		conf.NewDB().Data.Port,
-		conf.NewDB().Data.Database,
-	)
-)
+var db *sqlx.DB
 
-func init() {
-	db, err = sqlx.Connect("mysql", address)
+func New(Driver, Source string) {
+	var err error
+	db, err = sqlx.Connect(Driver, Source)
 	if err != nil {
-		defer db.Close()
 		log.Fatalf("connect db err: %v", err)
 	}
 
@@ -36,8 +25,4 @@ func init() {
 	db.SetConnMaxLifetime(128 * time.Minute)
 
 	db.Mapper = reflectx.NewMapperFunc("json", strings.ToLower)
-}
-
-func New() *sqlx.DB {
-	return db
 }
